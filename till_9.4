@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Probability Revision 9.1–9.4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+:root{
+  --paper:#ECEEF1; --grid:#D5DBE2; --grid-strong:#BCC6D1; --margin:#E9A7A7;
+  --ink:#1D2B4F; --muted:#5A6580; --accent:#2F5DA8; --accent-soft:#E3EBF8;
+  --pen:#C0392B; --pen-soft:#FBEAE7; --card:#FFFFFF; --line:#C9D3E0;
+  --hand:"Kalam","Comic Neue","Segoe Print",cursive;
+  --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --sq:22px;
+}
+*{box-sizing:border-box}
+html{background:var(--paper)}
+body{
+  margin:0; color:var(--ink); font-family:var(--body); font-size:17px; line-height:1.55;
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(to right, var(--grid-strong) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-strong) 1px, transparent 1px),
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: calc(var(--sq)*5) calc(var(--sq)*5), calc(var(--sq)*5) calc(var(--sq)*5), var(--sq) var(--sq), var(--sq) var(--sq);
+  min-height:100vh;
+}
+.wrap{max-width:860px; margin:0 auto; padding-inline:16px; padding-block:28px 64px; position:relative}
+header.top{display:flex; flex-direction:column; gap:2px; margin-bottom:22px}
+.eyebrow{font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700}
+h1{font-family:var(--hand); font-weight:700; font-size:clamp(34px,6vw,48px); line-height:1.1; margin:0; text-wrap:balance}
+h1 u{text-decoration-color:var(--pen); text-decoration-thickness:3px; text-underline-offset:6px}
+.sub{font-family:var(--hand); font-size:clamp(20px,3.4vw,26px); color:var(--pen); line-height:1.2; margin-top:4px}
+.setlabel{font-size:13px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+.lead{margin:6px 0 0; color:var(--muted); max-width:60ch}
+
+/* topic chooser */
+.step{font-family:var(--hand); font-size:24px; margin:18px 0 10px; display:flex; align-items:center; gap:10px}
+.step b{display:inline-grid; place-items:center; width:32px; height:32px; border:2px solid var(--ink); border-radius:50%; font-size:18px}
+.topics{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px}
+@media (max-width:620px){.topics{grid-template-columns:1fr}}
+.topic{
+  all:unset; box-sizing:border-box; cursor:pointer; display:flex; gap:14px; align-items:flex-start;
+  background:var(--card); border:2px solid var(--line); border-radius:6px; padding:16px 16px 14px;
+  transition:border-color .15s, transform .15s, box-shadow .15s;
+}
+.topic:hover{border-color:var(--accent); transform:translateY(-2px); box-shadow:0 4px 0 var(--accent-soft)}
+.topic:focus-visible{outline:3px solid var(--accent); outline-offset:3px}
+.topic .num{font-family:var(--hand); font-weight:700; font-size:34px; line-height:1; color:var(--accent); min-width:62px}
+.topic h3{margin:0 0 4px; font-size:18px; line-height:1.3}
+.topic p{margin:0; font-size:14.5px; color:var(--muted)}
+
+/* worksheet */
+.sheetbar{display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between; margin-bottom:6px}
+.btns{display:flex; flex-wrap:wrap; gap:8px}
+button.btn{
+  font:inherit; font-size:15px; font-weight:700; cursor:pointer; border-radius:6px; padding:8px 14px;
+  border:2px solid var(--ink); background:var(--card); color:var(--ink);
+}
+button.btn.primary{background:var(--accent); border-color:var(--accent); color:var(--paper)}
+button.btn:hover{filter:brightness(1.05)}
+button.btn:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+.sheet-title{font-family:var(--hand); font-size:clamp(26px,4.5vw,34px); font-weight:700; margin:10px 0 2px; line-height:1.2; text-wrap:balance}
+.sheet-title span{color:var(--accent)}
+.note{
+  display:flex; gap:10px; align-items:flex-start; background:var(--card); border:2px dashed var(--line);
+  border-radius:6px; padding:10px 14px; margin:10px 0 18px; font-size:15px;
+}
+.note .pencil{font-family:var(--hand); font-weight:700; color:var(--pen); white-space:nowrap}
+.q{
+  background:var(--card); border:1.5px solid var(--line); border-radius:6px;
+  padding:16px 18px 14px 18px; margin-bottom:16px; position:relative;
+  border-left:5px solid var(--margin);
+}
+.qhead{display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin-bottom:8px}
+.qnum{font-family:var(--hand); font-weight:700; font-size:26px; line-height:1}
+.level{display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)}
+.dots{display:inline-flex; gap:3px}
+.dots i{width:9px; height:9px; border-radius:50%; border:1.5px solid var(--accent)}
+.dots i.on{background:var(--accent)}
+.stem p{margin:0 0 8px; max-width:68ch}
+.parts{list-style:none; margin:6px 0 0; padding:0; display:grid; gap:8px}
+.parts li{display:grid; grid-template-columns:34px 1fr; gap:4px; align-items:baseline}
+.parts li.solo{grid-template-columns:1fr}
+.parts li.solo .pl{display:none}
+.mc{display:flex; flex-wrap:wrap; gap:6px 22px; margin-top:6px; font-variant-numeric:tabular-nums}
+svg.spin{max-width:170px}
+.parts .pl{font-weight:700; color:var(--muted)}
+.ans{
+  grid-column:2; margin-top:4px; padding:6px 10px; border-radius:4px;
+  background:var(--pen-soft); color:var(--pen); font-family:var(--hand); font-size:19px; line-height:1.5;
+}
+.ans .w{display:block; font-family:var(--body); font-size:14px; color:var(--ink); opacity:.85}
+.qfoot{display:flex; justify-content:flex-end; margin-top:10px}
+button.reveal{
+  font:inherit; font-size:14px; font-weight:700; cursor:pointer; border:0; background:none; color:var(--pen);
+  padding:4px 2px; border-bottom:2px solid currentColor;
+}
+button.reveal:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+
+/* maths bits */
+.fr{display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; line-height:1.1; margin:0 2px; font-variant-numeric:tabular-nums}
+.fr > span:first-child{border-bottom:1.5px solid currentColor; padding:0 3px}
+.fr > span:last-child{padding:0 3px}
+.tblwrap{overflow-x:auto; margin:6px 0 10px}
+table.tw{border-collapse:collapse; font-variant-numeric:tabular-nums; background:var(--card)}
+table.tw th, table.tw td{border:1.5px solid var(--ink); padding:5px 12px; text-align:center; font-size:15px}
+table.tw th{font-weight:700}
+table.tw td.blank{min-width:56px}
+table.tw td.blank::after{content:""; display:inline-block; width:40px; height:20px; border:1.5px dashed var(--muted); border-radius:3px; vertical-align:middle}
+.digits{font-family:ui-monospace,"SFMono-Regular",Menlo,monospace; letter-spacing:.25em; font-size:17px; background:var(--card); padding:6px 10px; border:1.5px solid var(--line); border-radius:4px; display:inline-block; margin:2px 0 8px; word-break:break-all}
+.numgrid{display:inline-grid; grid-template-columns:repeat(4,auto); gap:2px 22px; font-variant-numeric:tabular-nums; margin:2px 0 10px 8px}
+svg.venn{max-width:100%; height:auto; display:block; margin:6px 0 10px}
+svg.venn text{fill:var(--ink); font-family:var(--body)}
+svg.venn .shape{fill:none; stroke:var(--ink); stroke-width:1.8}
+kbd{font-family:inherit; font-weight:700}
+
+.foot{margin-top:26px; font-size:13px; color:var(--muted)}
+@media (prefers-reduced-motion:reduce){ .topic{transition:none} .topic:hover{transform:none} }
+@media (max-width:480px){ body{font-size:16px} .q{padding:14px 14px 12px} .parts li{grid-template-columns:28px 1fr} }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Year 9 Advanced · Unit 9</div>
+    <h1><u>Probability</u> revision</h1>
+    <div class="sub">Practice for Term 4 Assessment Task</div>
+    <p class="lead">Pick a topic to get every practice question for it, from easy to hard. Write the heading, the question number and your working in your book.</p>
+  </header>
+
+  <section id="chooser">
+    <div class="step"><b>1</b> Choose your topic</div>
+    <div class="topics" id="topics"></div>
+  </section>
+
+  <section id="sheet" hidden>
+    <div class="sheetbar">
+      <div class="step" style="margin:0"><b>2</b> Write it down</div>
+      <div class="btns">
+        <button class="btn" id="back" type="button">← Change topic</button>
+      </div>
+    </div>
+    <div class="sheet-title" id="sheetTitle"></div>
+    <div class="note"><span class="pencil">In your book:</span><span id="noteText"></span></div>
+    <div id="questions"></div>
+    <div class="btns" style="justify-content:flex-end">
+      <button class="btn" id="back2" type="button">← Change topic</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ---------- helpers ---------- */
+let rnd=Math.random;
+const seeded=seed=>()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+const R=(a,b)=>a+Math.floor(rnd()*(b-a+1));
+const pick=a=>a[Math.floor(rnd()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+const frHTML=(n,d)=>`<span class="fr"><span>${n}</span><span>${d}</span></span>`;
+function F(n,d){ if(n===0) return '0'; const g=gcd(n,d); n/=g; d/=g; return d===1?String(n):frHTML(n,d); }
+const Fr=(n,d)=>frHTML(n,d);                       // unsimplified, for working
+const pct=(x,dp)=>{const v=Math.round(x*Math.pow(10,dp+2)+1e-7)/Math.pow(10,dp);return v.toFixed(dp)+'%'};
+const pctN=x=>(Math.round(x*10000+1e-7)/100)+'%';       // up to 2 dp, trimmed
+const dec2=p=>(p/100).toFixed(2);
+const P=(q,a,w)=>({q,a,w});
+const range=(a,b)=>Array.from({length:b-a+1},(_,i)=>a+i);
+const dice=()=>{const o=[];for(let i=1;i<=6;i++)for(let j=1;j<=6;j++)o.push([i,j]);return o};
+const isPrime=n=>{if(n<2)return false;for(let i=2;i*i<=n;i++)if(n%i===0)return false;return true};
+const table=(head,rows)=>`<div class="tblwrap"><table class="tw"><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map((c,i)=>c==='?'?'<td class="blank"></td>':(i===0?`<th>${c}</th>`:`<td>${c}</td>`)).join('')}</tr>`).join('')}</table></div>`;
+function venn(A,B,a,both,b,n){
+  return `<svg class="venn" viewBox="0 0 320 180" width="320" role="img" aria-label="Venn diagram: ${A} only ${a}, both ${both}, ${B} only ${b}, neither ${n}">
+  <rect class="shape" x="4" y="4" width="312" height="172" rx="4"/>
+  <circle class="shape" cx="125" cy="92" r="62"/><circle class="shape" cx="195" cy="92" r="62"/>
+  <text x="100" y="23" font-size="13" text-anchor="middle">${A}</text><text x="220" y="23" font-size="13" text-anchor="middle">${B}</text>
+  <text x="100" y="100" font-size="20" text-anchor="middle" font-weight="700">${a}</text>
+  <text x="160" y="100" font-size="20" text-anchor="middle" font-weight="700">${both}</text>
+  <text x="220" y="100" font-size="20" text-anchor="middle" font-weight="700">${b}</text>
+  <text x="22" y="164" font-size="18" text-anchor="middle" font-weight="700">${n}</text></svg>`;
+}
+
+const ctx2=[['Athletics','Swimming'],['Cricket','Football'],['Walking','Jogging'],['Dog','Cat'],['Music','Drama'],['Netball','Soccer']];
+function mkTable(){let c11,c12,c21,c22;do{c11=R(10,35);c12=R(8,35);c21=R(8,30);c22=100-c11-c12-c21}while(c22<5||c22>40);return{c11,c12,c21,c22}}
+/* ---------- shared question builders ---------- */
+const Q=(lvl,fn)=>{fn.lvl=lvl;return fn};
+const one=(q,a,w,stem='')=>({stem,parts:[P(q,a,w)]});
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+const plural=(n,s,pl)=>n===1?s:(pl||s+'s');
+const SPIN={R:['red','#F28B82'],B:['blue','#8AB4F8'],Y:['yellow','#FDE68A'],G:['green','#81C995']};
+function spinnerSVG(secs,colored){
+  const n=secs.length,r=70,cx=80,cy=80;let s=`<svg class="venn spin" viewBox="0 0 160 160" width="170" role="img" aria-label="Spinner with ${n} equal sectors: ${secs.map(x=>colored?SPIN[x][0]:x).join(', ')}">`;
+  for(let i=0;i<n;i++){const a0=(-90+i*360/n)*Math.PI/180,a1=(-90+(i+1)*360/n)*Math.PI/180,am=(a0+a1)/2;
+    const x0=cx+r*Math.cos(a0),y0=cy+r*Math.sin(a0),x1=cx+r*Math.cos(a1),y1=cy+r*Math.sin(a1);
+    s+=`<path d="M${cx} ${cy} L${x0.toFixed(2)} ${y0.toFixed(2)} A${r} ${r} 0 0 1 ${x1.toFixed(2)} ${y1.toFixed(2)} Z" fill="${colored?SPIN[secs[i]][1]:'#FFFFFF'}" stroke="#1D2B4F" stroke-width="1.5"/>`;
+    s+=`<text x="${(cx+r*.64*Math.cos(am)).toFixed(1)}" y="${(cy+r*.64*Math.sin(am)+6).toFixed(1)}" font-size="17" font-weight="700" text-anchor="middle" style="fill:#1D2B4F">${secs[i]}</text>`}
+  return s+`<circle cx="${cx}" cy="${cy}" r="4" fill="#1D2B4F"/></svg>`;
+}
+const mc=opts=>`<span class="mc">${opts.map(o=>`<span>○ ${o}</span>`).join('   ')}</span>`;
+const dec=(x,dp=2)=>x.toFixed(dp);
+function evPct(x){return pctN(x)}
+
+/* ---------- 9.1 Theoretical probability (mirrors MathsOnline "Theoretical probability" Q1–Q40) ---------- */
+let bagDie=[],bagTwo=[],bagFour=[],bagFruit=[];
+const twoItems=[['a jar','jelly beans',['red','black']],['a tin','biscuits',['chocolate','plain']],['a box','pens',['blue','green']],['a pencil case','pencils',['HB','coloured']],['a bowl','lollies',['strawberry','lime']]];
+const fruitBags=[['a fruit bowl','green pears','yellow pears'],['a basket','red apples','green apples'],['a crate','oranges','mandarins']];
+const fourSets=[
+ {intro:(c,n)=>`A drawer has ${c[0]} white, ${c[1]} black, ${c[2]} gold and ${c[3]} silver hair ties. Priya takes one without looking.`,names:['white','black','gold','silver'],noun:'hair tie'},
+ {intro:c=>`A bag of lollies has ${c[0]} raspberry, ${c[1]} grape, ${c[2]} lemon and ${c[3]} cola flavoured lollies. Tom takes one at random.`,names:['raspberry','grape','lemon','cola'],noun:'lolly'},
+ {intro:c=>`A class library shelf holds ${c[0]} mystery, ${c[1]} fantasy, ${c[2]} sport and ${c[3]} history books. Ava picks one book at random.`,names:['mystery','fantasy','sport','history'],noun:'book'},
+ {intro:c=>`A bag contains ${c[0]} orange, ${c[1]} pink, ${c[2]} blue and ${c[3]} clear marbles. Leo takes one marble at random.`,names:['orange','pink','blue','clear'],noun:'marble'},
+ {intro:c=>`In a class, ${c[0]} students walk, ${c[1]} ride a bike, ${c[2]} catch the train and ${c[3]} are driven to school. One student is chosen at random.`,names:['walks','rides a bike','catches the train','is driven'],noun:'student',people:true},
+ {intro:c=>`A laundry basket has ${c[0]} white, ${c[1]} navy, ${c[2]} red and ${c[3]} spotted socks. One sock is pulled out at random.`,names:['white','navy','red','spotted'],noun:'sock'},
+ {intro:c=>`A school car park has ${c[0]} white, ${c[1]} grey, ${c[2]} blue and ${c[3]} red cars. One car is chosen at random.`,names:['white','grey','blue','red'],noun:'car'}
+];
+function fourCat(){const s=bagFour.pop();const c=[R(3,12),R(3,12),R(2,8),R(1,6)];const T=c[0]+c[1]+c[2]+c[3];const nm=s.names;
+  const an=w=>/^[aeiou]/.test(w)?'an':'a';const lab=i=>s.people?`the student ${nm[i]}`:`${an(nm[i])} ${nm[i]} ${s.noun}`;const notLab=i=>s.people?`the student does not ${nm[i].replace(/^walks$/,'walk').replace('rides','ride').replace('catches','catch').replace('is driven','get driven')}`:`not ${an(nm[i])} ${nm[i]} ${s.noun}`;
+  return{stem:`<p>${s.intro(c)} There are ${T} altogether.</p><p>Find the probability that${s.people?'':' it is'}:</p>`,
+  parts:[P(lab(0),F(c[0],T),`${c[0]} out of ${T}`),P(lab(2),F(c[2],T),`${c[2]} out of ${T}`),P(`${lab(1)} or ${s.people?'the student '+nm[3]:an(nm[3])+' '+nm[3]+' '+s.noun}`,F(c[1]+c[3],T),`${c[1]} + ${c[3]} = ${c[1]+c[3]}`),P(notLab(0),F(T-c[0],T),`${T} − ${c[0]} = ${T-c[0]}`),P(notLab(3),F(T-c[3],T),`${T} − ${c[3]} = ${T-c[3]}`)]}}
+function colourSpinner(n,notTwo){let secs;const cols=shuffle(['R','B','Y','G']).slice(0,n>=6?4:3);do{secs=Array.from({length:n},(_,i)=>i<cols.length?cols[i]:pick(cols));secs=shuffle(secs)}while(new Set(secs).size<cols.length);
+  const cnt=c=>secs.filter(x=>x===c).length;const [x,y,z]=shuffle(cols);const nm=c=>SPIN[c][0];
+  const third=notTwo?P(`does not land on either ${nm(x)} or ${nm(y)}`,F(n-cnt(x)-cnt(y),n),`${n} − ${cnt(x)} − ${cnt(y)} = ${n-cnt(x)-cnt(y)} sectors`):P(`does not land on ${nm(z)}`,F(n-cnt(z),n),`${n} − ${cnt(z)} = ${n-cnt(z)} sectors`);
+  return{stem:`<p>The spinner has ${n} equal sectors (R = red, B = blue, Y = yellow, G = green). It is spun once.</p>${spinnerSVG(secs,true)}<p>Find the probability that the spinner:</p>`,
+   parts:[P(`lands on ${nm(x)}`,F(cnt(x),n),`${cnt(x)} of ${n} sectors`),P(`lands on ${nm(x)} or ${nm(y)}`,F(cnt(x)+cnt(y),n),`${cnt(x)} + ${cnt(y)} = ${cnt(x)+cnt(y)} sectors`),third]}}
+function numSpinner(n,maxv,distinct){let secs=distinct?shuffle(range(1,n)):Array.from({length:n},()=>R(1,maxv));const k1=R(3,maxv-1),k2=R(2,maxv-1);const oddQ=rnd()<.5;
+  const c=f=>secs.filter(f).length;const par=oddQ?P('lands on an odd number',F(c(x=>x%2),n),`odd sectors: ${c(x=>x%2)}`):P('lands on an even number',F(c(x=>x%2===0),n),`even sectors: ${c(x=>x%2===0)}`);
+  return{stem:`<p>The spinner has ${n} equal sectors and is spun once.</p>${spinnerSVG(secs,false)}<p>Find the probability that the spinner:</p>`,
+   parts:[par,P(`lands on a number less than ${k1}`,F(c(x=>x<k1),n),`${c(x=>x<k1)} sectors`),P(`lands on ${k2} or more`,F(c(x=>x>=k2),n),`${c(x=>x>=k2)} sectors`)]}}
+const T1=[
+ Q(0,()=>{bagDie=shuffle(range(1,6));bagTwo=shuffle(twoItems);bagFour=shuffle(fourSets);bagFruit=shuffle(fruitBags);return one('A fair coin is flipped once. Find the probability that it lands on tails.',F(1,2),'2 equally likely outcomes, 1 is tails')}),
+ Q(0,()=>{const n=R(3,6);return one(`A quiz show contestant picks one of ${n} closed boxes. Only one box holds the prize. What is the chance the contestant wins the prize?`,F(1,n),`1 winning box out of ${n}`)}),
+ ...[0,1,2].map(()=>Q(0,()=>{const k=bagDie.pop();return one(`A fair six-sided die is rolled. Find the probability of rolling a ${k}.`,F(1,6),'1 favourable outcome out of 6')})),
+ Q(0,()=>one('A fair coin is flipped once. Find the probability that it lands on heads.',F(1,2),'2 equally likely outcomes, 1 is heads')),
+ ...[0,1,2].map(()=>Q(0,()=>{const k=bagDie.pop();return one(`A standard die is rolled once. Find the probability that it shows ${k}.`,F(1,6),'1 favourable outcome out of 6')})),
+ Q(0,()=>{const n=R(4,10),k=R(1,n);return one(`A spinner has ${n} equal sections numbered 1 to ${n}. Find the probability of spinning a ${k}.`,F(1,n),`1 section out of ${n}`)}),
+ Q(0,()=>{const n=R(5,9),g=R(2,n-2);return one(`${n} students are nominated for SRC captain. ${g} of them are girls. One student is chosen at random. What is the probability that a boy is chosen?`,F(n-g,n),`${n} − ${g} = ${n-g} boys`)}),
+ Q(0,()=>{const [ctr,a,b]=bagFruit.pop();const x=R(2,7),y=R(2,7);return one(`${cap(ctr)} holds ${x} ${a} and ${y} ${b}. One piece of fruit is picked at random. What is the probability it is one of the ${b}?`,F(y,x+y),`${y} out of ${x+y}`)}),
+ Q(0,()=>{const [a,b]=shuffle(range(1,6)).slice(0,2).sort();return one(`A standard six-sided die is rolled. Find the probability that it lands on ${a} or ${b}.`,F(2,6),'2 favourable outcomes out of 6')}),
+ Q(0,()=>{const k=R(3,6);return one(`A standard six-sided die is rolled. Find the probability that it lands on a number less than ${k}.`,F(k-1,6),`${range(1,k-1).join(', ')}: ${k-1} out of 6`)}),
+ Q(0,()=>one('A standard six-sided die is rolled. Find the probability that it lands on an even number.',F(3,6),'2, 4, 6: 3 out of 6')),
+ Q(0,()=>one('A fair die is rolled. Find the probability of rolling a multiple of 3.',F(2,6),'3, 6: 2 out of 6')),
+ ...[0,1,2].map(()=>Q(0,()=>{const [ctr,noun,[a,b]]=bagTwo.pop();const x=R(2,8),y=R(2,8);const ask=pick([a,b]);return one(`${cap(ctr)} contains ${x} ${a} and ${y} ${b} ${noun}. One is taken at random. What is the probability it is ${ask}?`,F(ask===a?x:y,x+y),`${ask===a?x:y} out of ${x+y}`)})),
+ Q(0,()=>{const n=R(6,10),b=R(2,n-2);return one(`${n} students are running for house captain. ${b} are boys. One student is chosen at random. What is the probability a girl is chosen?`,F(n-b,n),`${n} − ${b} = ${n-b} girls`)}),
+ Q(1,()=>colourSpinner(3)),Q(1,()=>colourSpinner(4)),Q(1,()=>colourSpinner(6)),Q(1,()=>colourSpinner(8,true)),Q(1,()=>colourSpinner(8,true)),Q(1,()=>colourSpinner(7)),
+ Q(1,()=>numSpinner(5,5,true)),Q(1,()=>numSpinner(6,6,true)),Q(1,()=>numSpinner(8,5,false)),Q(1,()=>numSpinner(8,6,false)),
+ Q(2,()=>{const suit=pick(['Heart','Diamond','Club','Spade']);const k=R(2,10);const col=pick(['red','black']);const face=pick(['King','Queen','Jack','Ace']);
+   return{stem:`<p>A standard pack of 52 cards has 4 suits: Hearts, Diamonds (red) and Clubs, Spades (black). One card is drawn at random.</p><p>Find the probability that the card is:</p>`,
+   parts:[P(`a ${suit}`,F(13,52),'13 cards in each suit'),P('a red card',F(26,52),'26 red cards'),P('a black card',F(26,52),'26 black cards'),P(`a ${col} ${k}`,F(2,52),`the ${k} of ${col==='red'?'Hearts and Diamonds':'Clubs and Spades'}`),P(`a ${face}`,F(4,52),`one ${face} in each suit`)]}}),
+ Q(2,fourCat),Q(2,fourCat),Q(2,fourCat),
+ Q(2,()=>{const N=pick([20,24,30]);const k=R(1,N);const m=pick([4,5]);const a=R(4,7),b=N-R(4,7);const s=range(1,N);const c=f=>s.filter(f).length;
+   return{stem:`<p>A box has ${N} balls numbered 1 to ${N}. One ball is drawn at random.</p><p>Find the probability that the number is:</p>`,
+   parts:[P(`${k}`,F(1,N),`1 ball out of ${N}`),P('odd',F(c(x=>x%2),N),`${c(x=>x%2)} odd numbers`),P(`a multiple of ${m}`,F(c(x=>x%m===0),N),s.filter(x=>x%m===0).join(', ')),P(`less than ${a} or greater than ${b}`,F(c(x=>x<a||x>b),N),`${a-1} + ${N-b} = ${c(x=>x<a||x>b)}`),P('not a multiple of 3',F(c(x=>x%3),N),`${N} − ${c(x=>x%3===0)} multiples of 3`)]}}),
+ Q(2,fourCat),Q(2,fourCat),Q(2,fourCat),
+ Q(3,()=>{const w=pick(['MATHEMATICS','PARRAMATTA','KOOKABURRA','STATISTICS','WOOLLOOMOOLOO','MISSISSIPPI']);const L=w.length;const cnt={};for(const c of w)cnt[c]=(cnt[c]||0)+1;const ks=Object.keys(cnt);const rep=shuffle(ks.filter(c=>cnt[c]>1));const x=rep[0],y=rep[1]||shuffle(ks.filter(c=>c!==x))[0];const z=shuffle(ks.filter(c=>c!==x&&c!==y))[0];const v=[...w].filter(c=>'AEIOU'.includes(c)).length;
+   return{stem:`<p>The letters of the word <b>${w}</b> are written on ${L} tiles. One tile is chosen at random.</p><p>Find the probability that it is:</p>`,
+   parts:[P(`the letter ${x}`,F(cnt[x],L),`${cnt[x]} of ${L} tiles`),P(`the letter ${y}`,F(cnt[y],L),`${cnt[y]} of ${L} tiles`),P(`${x} or ${y}`,F(cnt[x]+cnt[y],L),`${cnt[x]} + ${cnt[y]}`),P('not a vowel',F(L-v,L),`${v} vowels, so ${L} − ${v} = ${L-v}`),P(`not the letter ${z}`,F(L-cnt[z],L),`${L} − ${cnt[z]}`)]}}),
+ Q(2,fourCat)
+];
+
+/* ---------- 9.2 Observed probability / relative frequency (mirrors "Relative frequency" Q1–Q40) ---------- */
+let bagVenn2=[],bagShop=[],bagPop=[],bagBox=[],bagSales=[],bagDart=[];
+const shops=[['Kaia\'s Bakery','pies','sold were beef'],['Sam\'s Surf Shop','surfboards','sold were longboards'],['Noah\'s Gelato','cups of gelato','sold were mango'],['Zara\'s Bike Shop','bikes','sold were BMX bikes']];
+const pops=[{p:'NSW has about',u:'university students',t:'lived with their parents',q:'live with their parents'},{p:'A regional city has about',u:'residents',t:'went to the local show',q:'went to the show'},{p:'There are about',u:'koalas in a national park',t:'had a tracking collar',q:'have a tracking collar'},{p:'A state has about',u:'secondary students',t:'play a team sport on weekends',q:'play a team sport on weekends'}];
+function rfShop(){const [s,it,ph]=bagShop.pop();const n=pick([5,8,10]);const k=R(2,n-1);const m=n*R(8,30);const nm=ph.replace('sold were ','');return one(`At ${s}, ${k} of the last ${n} ${it} ${ph}. If ${m} ${it} are sold this month, how many would you expect to be ${nm}?`,`${k*m/n}`,`${F(k,n)} × ${m}`)}
+function rfPop(){const s=bagPop.pop();const n=pick([200,400,500,1000]);const k=R(Math.round(n*.1),Math.round(n*.6));const M=n*R(60,500);return one(`${s.p} ${M.toLocaleString()} ${s.u}. A random sample of ${n} found that ${k} ${s.t}. Based on this, how many would you expect ${s.q}?`,`${(k*M/n).toLocaleString()}`,`${F(k,n)} × ${M.toLocaleString()}`)}
+function rfVenn(kind){const [A,B,who]=bagVenn2.pop();const a=R(8,30),both=R(3,12),b=R(8,30),n=R(3,20),T=a+both+b+n;
+  const parts=[P('How many students were surveyed?',`${T}`,`${a} + ${both} + ${b} + ${n}`)];
+  if(kind===0){parts.push(P(`Find the relative frequency of ${A}.`,F(a+both,T),`(${a} + ${both}) ÷ ${T}`));parts.push(P(`Using these results, find the probability (as a %, 1 d.p.) a student chosen at random likes ${B}.`,pct((b+both)/T,1),`(${b} + ${both}) ÷ ${T}`))}
+  if(kind===1){parts.push(P(`Find the relative frequency of ${B} (2 d.p.).`,dec((b+both)/T),`(${b} + ${both}) ÷ ${T}`));parts.push(P(`Find the probability (as a %, 1 d.p.) a student chosen at random likes ${A} but not ${B}.`,pct(a/T,1),`${a} ÷ ${T}`))}
+  if(kind===2){parts.push(P(`Find the relative frequency of ${B}.`,F(b+both,T),`(${b} + ${both}) ÷ ${T}`));parts.push(P('Using these results, find the probability a student chosen at random likes both.',F(both,T),`${both} ÷ ${T}`))}
+  return{stem:`<p>Students were asked which ${who} they like. The results are shown.</p>${venn(A,B,a,both,b,n)}`,parts}}
+function rfBox(pctAns){const [c1,c2]=bagBox.pop();const N=pick([10,12,15,20,24,25,30]);const x=R(Math.ceil(N*.2),Math.floor(N*.8));const m=pick([2,3,4]);const T=N*m;const f1=x*m,f2=T-f1;
+  return{stem:`<p>A box has ${N} marbles that are either ${c1} or ${c2}. A marble is taken out, its colour is noted, and it is put back. This is done ${T} times.</p>${table(['Colour',c1,c2],[['Frequency',f1,f2]])}`,
+  parts:[P(`What is the relative frequency of ${c1}?`,F(f1,T),`${f1} ÷ ${T}`),P(`Using these results, what is the probability a marble drawn at random is ${c2}${pctAns?' (as a %, 1 d.p.)':''}?`,pctAns?pct(f2/T,1):F(f2,T),`${f2} ÷ ${T}`),P(`How many ${c1} marbles would you expect there to be in the box?`,`${x}`,`${F(f1,T)} × ${N}`)]}}
+function rfSales(){const [ch]=bagSales.pop();const s=R(15,65);const M=100*R(10,40);return{stem:`<p>A company's research shows it makes a sale to ${s}% of all people who make ${ch}.</p>`,
+  parts:[P(`What percentage of ${ch.replace(/^an? /,'').replace(/y$/,'ies')} do not result in a sale?`,`${100-s}%`,`100% − ${s}%`),P(`Out of ${M.toLocaleString()} ${ch.replace(/^an? /,'').replace(/y$/,'ies')}, how many sales could be expected?`,`${(s*M/100).toLocaleString()}`,`${s}% of ${M.toLocaleString()}`)]}}
+function rfDart(miss){const nm=bagDart.pop();const h=R(6,24)*2;const T=R(1,4)*50;const given=miss?100-h:h;
+  return{stem:`<p>${nm} has a ${given}% chance of ${miss?'missing':'hitting'} the bullseye when throwing a dart.</p>`,
+  parts:[P(`Find the chance of ${miss?'hitting':'missing'} the bullseye.`,`${100-given}%`,`100% − ${given}%`),P(`In a game, ${nm} has ${T} throws. How many times would you expect a bullseye?`,`${h*T/100}`,`${h}% of ${T}`)]}}
+function rfDrawer(fmt){const who=pick(['Ms Tran','Mr Okafor','Mrs Russo','Mr Hughes']);const N=pick([5,6]);const comp=N===6?pick([[3,2,1],[2,3,1],[3,1,2]]):pick([[2,2,1],[3,1,1]]);const cols=['blue','black','red'];const D=R(170,210);
+  let f=comp.map(c=>Math.round(D*c/N+R(-6,6)));f[2]=D-f[0]-f[1];const i=1;const askPens=pick([0,2]);const Tdays=pick([45,48,50]);const exp=Math.round(Tdays*f[i]/D);const opts=shuffle([exp,exp-4,exp+3,exp+6]).sort((a,b)=>a-b);
+  return{stem:`<p>${who} keeps ${N} pens (blue, black or red) in a desk drawer. Each day one pen is taken out at random to mark the roll, then put back.</p>${table(['Colour',...cols],[['Frequency',...f]])}`,
+  parts:[P(`What is the relative frequency of ${cols[i]}${fmt?' (2 d.p.)':''}?`,fmt?dec(f[i]/D):F(f[i],D),`${f[i]} ÷ ${D}`),P(`How many ${cols[askPens]} pens do you think are in the drawer?`,`${comp[askPens]}`,`${F(f[askPens],D)} × ${N} ≈ ${(f[askPens]/D*N).toFixed(2)}`),P(`The term had ${Tdays} days. About how many times would you expect a ${cols[i]} pen to be chosen? ${mc(opts)}`,`${exp}`,`${F(f[i],D)} × ${Tdays} ≈ ${(f[i]/D*Tdays).toFixed(1)}`)]}}
+const T2=[
+ Q(0,()=>{bagVenn2=shuffle([['Test','T20','types of cricket'],['Netball','Hockey','sports'],['Piano','Guitar','instruments'],['Drama','Dance','electives'],['Soccer','Basketball','sports']]);bagShop=shuffle(shops);bagPop=shuffle(pops);bagBox=shuffle([['green','yellow'],['blue','red'],['blue','yellow'],['green','white'],['red','white'],['black','orange'],['purple','green']]);bagSales=shuffle([['a phone enquiry'],['an email enquiry'],['a website enquiry'],['a phone enquiry']]);bagDart=shuffle(['Arjun','Chloe','Tim','Isla']);
+   const n=pick([20,25,40,50]);const k=R(Math.round(n*.2),Math.round(n*.6));return one(`Ella surveyed ${n} students about their favourite streaming service. ${k} chose StreamMax. Find the experimental probability (as a %) that the next student Ella asks chooses StreamMax.`,pctN(k/n),`${k} ÷ ${n}`)}),
+ Q(0,()=>{const n=pick([10,20,25,50]);const k=R(2,Math.round(n*.5));return one(`${k} of the last ${n} phones sold at a store were the Nova model. Based on this, find the probability (as a %) that the next phone sold is a Nova.`,pctN(k/n),`${k} ÷ ${n}`)}),
+ Q(0,()=>{const f=[R(20,50),R(10,40),R(10,30)];const T=f[0]+f[1]+f[2];return{stem:`<p>Each time Mika plays a phone game she earns one token. The table shows the tokens earned so far.</p>${table(['Colour','red','blue','green'],[['Tokens',...f]])}`,
+   parts:[P('How many games has Mika played?',`${T}`,`${f.join(' + ')}`),P('What is the relative frequency of green?',F(f[2],T),`${f[2]} ÷ ${T}`),P('What is the relative frequency of blue?',F(f[1],T),`${f[1]} ÷ ${T}`)]}}),
+ Q(0,()=>{const r=R(4,9)*5,b=R(5,9)*5;const g=100-r-b;const m=pick([20,40,60]);return{stem:`<p>Each time Jonah plays a computer game he earns one token. The table shows the tokens earned so far.</p>${table(['Colour','red','blue','green'],[['Tokens',r,b,g]])}`,
+   parts:[P('How many games has Jonah played?','100'),P('What is the relative frequency of red?',F(r,100),`${r} ÷ 100`),P(`Jonah plays another ${m} games. How many more red tokens could he expect?`,`${r*m/100}`,`${F(r,100)} × ${m}`)]}}),
+ Q(0,()=>{const n=pick([50,80,100,200]);const k=R(Math.round(n*.3),Math.round(n*.7));const M=n*R(30,90);return one(`A survey of ${n} people found that ${k} exercise at least three times a week. If this sample represents the ${M.toLocaleString()} people in a town, how many would you expect to exercise at least three times a week?`,`${(k*M/n).toLocaleString()}`,`${F(k,n)} × ${M.toLocaleString()}`)}),
+ Q(0,()=>{const n=pick([20,25,40,50]);const k=R(3,Math.round(n*.4));const m=n*R(4,10);return one(`At a hat shop, ${k} of the last ${n} hats sold were bucket hats. The rest were caps. How many of the next ${m} hats sold would you expect to be caps?`,`${(n-k)*m/n}`,`${F(n-k,n)} × ${m}`)}),
+ ...[0,1].map(()=>Q(0,()=>{const T=pick([40,50,25,20]);let f;do{f=[R(2,T/2),R(2,T/2),R(2,T/2)];f.push(T-f[0]-f[1]-f[2])}while(f[3]<2);const labs=['Car','Walk','Bus','Bike'];
+   return{stem:`<p>A survey recorded how the first ${T} students to arrive travelled to school.</p>${table(['Transport',...labs],[['Students',...f]])}`,parts:[P('Find the probability (as a %) that the next student to arrive walks to school.',pctN(f[1]/T),`${f[1]} ÷ ${T}`)]}})),
+ Q(1,()=>rfVenn(0)),Q(1,()=>rfVenn(1)),Q(1,()=>rfVenn(2)),Q(1,()=>rfVenn(2)),
+ Q(1,rfShop),Q(1,rfShop),Q(1,rfShop),
+ Q(1,rfPop),Q(1,rfPop),Q(1,rfPop),
+ Q(2,()=>{const M=R(15,30)*1000;const k=R(12,38);const est=k/50*M;const r=Math.round(est/1000)*1000;const opts=shuffle([r,r-2000,r+2000,r+4000]).sort((a,b)=>a-b);
+   return one(`There are about ${M.toLocaleString()} wombats in a region. Rangers check a random sample of 50 and find ${k} have mange. Based on this, the number of wombats in the region with mange is closest to: ${mc(opts.map(x=>x.toLocaleString()))}`,r.toLocaleString(),`${F(k,50)} × ${M.toLocaleString()} = ${est.toLocaleString()}`)}),
+ Q(2,()=>rfBox(true)),Q(2,()=>rfBox(true)),Q(2,()=>rfBox(false)),Q(2,()=>rfBox(false)),Q(2,()=>rfBox(false)),Q(2,()=>rfBox(false)),Q(2,()=>rfBox(false)),
+ Q(2,rfSales),Q(2,()=>rfDart(false)),Q(2,()=>rfDart(false)),Q(2,()=>rfDart(true)),Q(2,rfSales),Q(2,rfSales),Q(2,rfSales),
+ Q(3,()=>rfDrawer(true)),Q(3,()=>rfDrawer(true)),Q(3,()=>rfDrawer(false)),Q(3,()=>rfDrawer(false)),
+ Q(3,()=>{const who=pick(['Mrs Lee','Mr Park']);const comp=pick([[2,2,1],[2,1,2],[1,2,2]]);const cols=['red','blue','yellow'];const D=R(100,130);let f=comp.map(c=>Math.round(D*c/5+R(-5,5)));f[2]=D-f[0]-f[1];const ask=pick([0,1,2]);const Td=50;const exp=Math.round(Td*f[0]/D);const opts=shuffle([exp,exp-2,exp+2,exp-4]).sort((a,b)=>a-b);
+   return{stem:`<p>${who} keeps 5 tiles (red, blue and yellow) in a bag. Each day one tile is picked at random to choose an activity, then put back.</p>${table(['Colour',...cols],[['Frequency',...f]])}`,
+   parts:[P('What is the relative frequency of blue?',F(f[1],D),`${f[1]} ÷ ${D}`),P(`How many ${cols[ask]} tiles do you think are in the bag?`,`${comp[ask]}`,`${F(f[ask],D)} × 5 ≈ ${(f[ask]/D*5).toFixed(2)}`),P(`The term had ${Td} days. About how many times would you expect a red tile? ${mc(opts)}`,`${exp}`,`${F(f[0],D)} × ${Td} ≈ ${(f[0]/D*Td).toFixed(1)}`)]}}),
+ Q(3,()=>{const T=pick([40,50,60]);let f;do{f=[R(10,T/2),R(8,T/2)];f.push(T-f[0]-f[1])}while(f[2]<4);const M=T*R(10,40);
+   return{stem:`<p>A blood bank records the blood types of a group of donors.</p>${table(['Blood type','Type O','Type A','Type B'],[['Donors',...f]])}`,
+   parts:[P('Find the relative frequency of a donor having Type A blood.',F(f[1],T),`${f[1]} ÷ ${T}`),P('Find the relative frequency of a donor having Type O or Type B blood.',F(f[0]+f[2],T),`(${f[0]} + ${f[2]}) ÷ ${T}`),P(`If ${M.toLocaleString()} people donate next month, how many would you expect to have Type A?`,`${(f[1]*M/T).toLocaleString()}`,`${F(f[1],T)} × ${M.toLocaleString()}`)]}}),
+ Q(3,()=>{const T=pick([50,60,80]);let f;do{f=[R(15,T/2),R(8,T/3)];f.push(T-f[0]-f[1])}while(f[2]<5);const M=T*R(8,25);
+   return{stem:`<p>A librarian records the types of books borrowed on one Saturday.</p>${table(['Type','Fiction','Sci-fi','Biography'],[['Books',...f]])}`,
+   parts:[P('Find the relative frequency of a borrowed book being sci-fi.',F(f[1],T),`${f[1]} ÷ ${T}`),P('Find the relative frequency of a borrowed book <b>not</b> being fiction.',F(T-f[0],T),`(${f[1]} + ${f[2]}) ÷ ${T}`),P(`If ${M.toLocaleString()} books are borrowed next month, how many would you expect <b>not</b> to be fiction?`,`${((T-f[0])*M/T).toLocaleString()}`,`${F(T-f[0],T)} × ${M.toLocaleString()}`)]}})
+];
+
+/* ---------- 9.3 Tree diagrams and two-step experiments (mirrors "Tree diagrams" Q1–Q40) ---------- */
+let bagWO=[],bagName3=[],bagGame=[],bagMenu=[];
+const MENUS=[['At a school formal, guests choose','a main of lamb, fish or pasta','either dessert or a fruit platter'],['A café meal deal lets you choose','a wrap, salad or toastie','either juice or water'],['At a camp, students choose','hiking, kayaking or archery','either morning or afternoon']];
+const balls4=()=>shuffle(['green','orange','purple','blue','pink']).slice(0,4);
+function woTwo(sameAsk){const [thing,c1,c2]=bagWO.pop();const a=R(3,7),b=R(3,7),T=a+b,D=T*(T-1);
+  const last=sameAsk?P(`the ${thing} are the same colour`,F(a*(a-1)+b*(b-1),D),`${Fr(a,T)} × ${Fr(a-1,T-1)} + ${Fr(b,T)} × ${Fr(b-1,T-1)}`):P(`the ${thing} are different colours`,F(2*a*b,D),`${Fr(a,T)} × ${Fr(b,T-1)} + ${Fr(b,T)} × ${Fr(a,T-1)}`);
+  return{stem:`<p>A box contains ${a} ${c1} and ${b} ${c2} ${thing}. Two are taken out at random, without replacement.</p><p>Find the probability that:</p>`,
+  parts:[P(`both are ${c1}`,F(a*(a-1),D),`${Fr(a,T)} × ${Fr(a-1,T-1)}`),P(`a ${c2} is taken, then a ${c1}`,F(a*b,D),`${Fr(b,T)} × ${Fr(a,T-1)}`),last]}}
+function twoGames(p){const q=100-p;return{stem:`<p>In a game of chance, the probability of winning is ${p}%. You play two games. Find the probability (as a %) of:</p>`,
+  parts:[P('winning both',pctN(p*p/1e4),`${p/100} × ${p/100}`),P('losing both',pctN(q*q/1e4),`${q/100} × ${q/100}`),P('winning exactly one',pctN(2*p*q/1e4),`${p/100} × ${q/100} + ${q/100} × ${p/100}`)]}}
+function biased(face){const p=pick([55,60,65,70,75])/100,q=+(1-p).toFixed(2);const other=face==='heads'?'tails':'heads';const f1=face==='heads'?'head':'tail',o1=face==='heads'?'tail':'head';
+  return{stem:`<p>A coin is biased so that it has a ${Math.round(p*100)}% chance of landing on ${face}. It is thrown 3 times. Find the probability (as a %, 1 d.p.) of getting:</p>`,
+  parts:[P(`3 ${face}`,pct(p**3,1),`${p}³`),P(`2 ${other} and 1 ${f1}`,pct(3*q*q*p,1),`3 × ${q}² × ${p}`),P(`at least 1 ${f1}`,pct(1-q**3,1),`1 − ${q}³`)]}}
+function twoSolve(){const [a,b]=bagName3.splice(0,2);const pa=R(5,8)*10,pb=R(6,9)*10;const qa=100-pa,qb=100-pb;
+  return{stem:`<p>${a} and ${b} each try a hard puzzle on their own. ${a} has a ${pa}% chance of solving it and ${b} has a ${pb}% chance. Find the probability (as a %) that:</p>`,
+  parts:[P('both solve it',pctN(pa*pb/1e4),`${pa/100} × ${pb/100}`),P(`${b} solves it but ${a} does not`,pctN(qa*pb/1e4),`${qa/100} × ${pb/100}`),P('neither solves it',pctN(qa*qb/1e4),`${qa/100} × ${qb/100}`),P('at least one of them solves it',pctN(1-qa*qb/1e4),`1 − ${qa/100} × ${qb/100}`)]}}
+function threeMatch(){const name=bagName3.shift();const [ev,evs,goal]=pick([['tennis match','matches','reach the semi-finals'],['race','races','qualify for the final'],['chess game','games','win a medal'],['badminton match','matches','reach the finals']]);
+  const w1=pick([50,55,60,65,70,75,80])/100,pw=pick([65,70,75,80,85])/100,pl=pick([30,35,40,45])/100;
+  let all=0,none=0,two=0;for(let m=0;m<8;m++){const r=[m&4,m&2,m&1].map(Boolean);let pr=r[0]?w1:1-w1;for(let i=1;i<3;i++){const x=r[i-1]?pw:pl;pr*=r[i]?x:1-x}const w=r.filter(Boolean).length;if(w===3)all+=pr;if(w===0)none+=pr;if(w>=2)two+=pr}
+  return{stem:`<p>${name} plays 3 ${evs} and needs to win at least 2 to ${goal}. The chance of winning the first ${ev} is ${Math.round(w1*100)}%. After a win, the chance of winning the next one is ${Math.round(pw*100)}%. After a loss, it drops to ${Math.round(pl*100)}%.</p><p>Calculate the probability (as a %, 1 d.p.) that ${name}:</p>`,
+  parts:[P(`wins all 3 ${evs}`,pct(all,1),`${w1} × ${pw} × ${pw}`),P(`loses all 3 ${evs}`,pct(none,1),`${+(1-w1).toFixed(2)} × ${+(1-pl).toFixed(2)} × ${+(1-pl).toFixed(2)}`),P(`wins at least one ${ev}`,pct(1-none,1),`1 − P(loses all 3)`),P(`goes on to ${goal}`,pct(two,1),'P(WWW) + P(WWL) + P(WLW) + P(LWW)')]}}
+function menu(){const [ctx,a,b]=bagMenu.pop();
+  const A=a.replace(/^a main of |^a /,'').split(/, | or /);const B=b.replace('either ','').split(' or ');const T=A.length*B.length;const x=A[1],y=B[0],z=A[2];
+  return{stem:`<p>${ctx} ${a}, and then ${b}. One combination is chosen at random. Draw a tree diagram to help.</p><p>Find the probability that:</p>`,
+  parts:[P(`${x} is chosen`,F(B.length,T),`${B.length} of ${T} combinations`),P(`${z} with ${B[1]} is chosen`,F(1,T),`1 of ${T} combinations`),P(`${x} or ${y} is chosen, but not both`,F(A.length+B.length-2,T),`${x} without ${y}: ${B.length-1}; ${y} without ${x}: ${A.length-1}`)]}}
+function cardsTwo(ds){const nums=[];for(const a of ds)for(const b of ds)if(a!==b)nums.push(10*a+b);const n=nums.length;const ev=nums.filter(x=>x%2===0).length;const pr=nums.filter(isPrime).length;const g=ds[1]*10;const gt=nums.filter(x=>x>g).length;const odd=n-ev;
+  return{stem:`<p>Three cards labelled ${ds.join(', ')} are placed in a box. Two cards are drawn one at a time, <b>without replacement</b>, and placed side by side to make a two-digit number.</p><p>Find:</p>`,
+  parts:[P('the probability the number is even',F(ev,n),`list: ${nums.join(', ')}; ${ev} even`),ds[0]===1?P('the probability the number is prime',F(pr,n),`prime: ${nums.filter(isPrime).join(', ')||'none'}`):P(`the probability the number is greater than ${g}`,F(gt,n),`${gt} of ${n}`),P('If this is done 150 times, how many odd numbers would you expect?',`${150*odd/n}`,`${F(odd,n)} × 150`)]}}
+function numberedBalls(nb,nr,sumA,sumB,atLeast){const balls=[...range(1,nb).map(k=>['blue',k]),...range(1,nr).map(k=>['red',k])];const pairs=[];for(let i=0;i<balls.length;i++)for(let j=i+1;j<balls.length;j++)pairs.push([balls[i],balls[j]]);const N=pairs.length;
+  const c=f=>pairs.filter(f).length;const both=c(([x,y])=>x[0]===atLeast&&y[0]===atLeast&&x[1]+y[1]===sumA);const diff=c(([x,y])=>x[0]!==y[0]&&x[1]+y[1]===sumB);const al=c(([x,y])=>x[0]===atLeast||y[0]===atLeast);
+  return{stem:`<p>A bag has ${nb} blue balls numbered 1 to ${nb} and ${nr} red balls numbered 1 to ${nr}. Two balls are chosen at random, <b>without replacement</b>. List the ${N} possible pairs.</p><p>Find the probability that:</p>`,
+  parts:[P(`both balls are ${atLeast} and have a sum of ${sumA}`,F(both,N),`${both} of ${N} pairs`),P(`the balls are different colours and have a sum of ${sumB}`,F(diff,N),`${diff} of ${N} pairs`),P(`at least one ball is ${atLeast}`,F(al,N),`${al} of ${N} pairs`)]}}
+const T3=[
+ Q(0,()=>{bagWO=shuffle([['balls','blue','yellow'],['counters','red','white'],['beads','black','silver'],['marbles','green','orange']]);bagMenu=shuffle(MENUS);bagGame=shuffle(range(3,9).map(x=>x*5));bagName3=shuffle(['Ruby','Hamish','Anika','Jack','Mei','Oscar','Layla','Finn','Zoe','Kai','Tara','Ben']);
+   const b=balls4();return one(`A ${b.join(', ').replace(/, ([^,]*)$/,' and $1')} ball are placed in a bag. Two balls are drawn out at random, one after the other, <b>without replacement</b>. Using a tree diagram, find the probability that the ${b[2]} ball is drawn first.`,F(1,4),'4 equally likely first draws')}),
+ Q(0,()=>{const c=shuffle(['red','blue','green','yellow']).slice(0,3);return{stem:`<p>A spinner has three equal sectors coloured ${c.join(', ')}. It is spun twice. Draw a tree diagram.</p>`,
+   parts:[P(`What is the probability of ${c[1]} on the 1st spin?`,F(1,3),'1 of 3 sectors'),P(`What is the probability of ${c[0]} at least once?`,F(5,9),`1 − ${F(2,3)} × ${F(2,3)}`),P(`What is the probability of ${c[2]} both times?`,F(1,9),`${F(1,3)} × ${F(1,3)}`)]}}),
+ Q(0,()=>{const g=R(4,8),b=R(2,4),T=g+b,D=T*(T-1);return{stem:`<p>A bag has ${g} good and ${b} bruised peaches. Two peaches are picked at random, one after the other, <b>without replacement</b>.</p><p>Find the probability of picking:</p>`,
+   parts:[P('2 good peaches',F(g*(g-1),D),`${Fr(g,T)} × ${Fr(g-1,T-1)}`),P('2 bruised peaches',F(b*(b-1),D),`${Fr(b,T)} × ${Fr(b-1,T-1)}`),P('1 good and 1 bruised peach',F(2*g*b,D),`${Fr(g,T)} × ${Fr(b,T-1)} + ${Fr(b,T)} × ${Fr(g,T-1)}`)]}}),
+ Q(0,()=>{const r=R(3,7),u=R(3,6),T=r+u,D=T*(T-1);return{stem:`<p>A bowl has ${r} ripe (R) and ${u} unripe (U) avocados. Two avocados are picked at random, one after the other, <b>without replacement</b>.</p><p>Draw a probability tree diagram showing the probability on every branch. Then use your tree to find the probability that:</p>`,
+   parts:[P('the first avocado is ripe',F(r,T),`1st pick branch R: ${Fr(r,T)}. Your tree: 1st pick R ${Fr(r,T)}, U ${Fr(u,T)}; after R: R ${Fr(r-1,T-1)}, U ${Fr(u,T-1)}; after U: R ${Fr(r,T-1)}, U ${Fr(u-1,T-1)}`),P('both avocados are ripe',F(r*(r-1),D),`${Fr(r,T)} × ${Fr(r-1,T-1)}`),P('one avocado is ripe and one is unripe',F(2*r*u,D),`${Fr(r,T)} × ${Fr(u,T-1)} + ${Fr(u,T)} × ${Fr(r,T-1)}`)]}}),
+ Q(0,()=>{const ask=pick([['two boys',F(1,4),'BB is 1 of BB, BG, GB, GG'],['one boy and one girl',F(2,4),'BG and GB: 2 of 4']]);return one(`A family has two children. Using a tree diagram, find the probability of the family having ${ask[0]}.`,ask[1],ask[2])}),
+ Q(0,()=>{const b=balls4();return one(`A ${b.join(', ').replace(/, ([^,]*)$/,' and $1')} ball are placed in a bag. Two balls are drawn out at random, one after the other, <b>without replacement</b>. Using a tree diagram, find the probability that two ${b[0]} balls are drawn. ${mc(['0','½','1','¼'])}`,'0','there is only one '+b[0]+' ball, so it is impossible')}),
+ Q(1,menu),
+ Q(1,()=>{const L=pick(['X, Y or Z','A, B or C']).split(/, | or /);return{stem:`<p>A game show winner randomly picks a prize door labelled ${L[0]}, ${L[1]} or ${L[2]}. Noor watches the show on two nights in a row. Draw a tree diagram.</p>`,
+   parts:[P(`Find the probability that door ${L[0]} is picked on the first night.`,F(1,3)),P(`Find the probability that door ${L[1]} is picked on both nights.`,F(1,9),`${F(1,3)} × ${F(1,3)}`),P(`Find the probability that door ${L[0]} is picked at least once.`,F(5,9),`1 − ${F(2,3)} × ${F(2,3)}`)]}}),
+ ...[0,1].map(()=>Q(1,()=>{const D=dice();const c=f=>D.filter(f).length;const k=R(3,11);let a=R(2,12),b;do{b=R(2,12)}while(b===a);const m=R(4,9);const lt=rnd()<.5;
+   const ck=c(([x,y])=>x+y===k),cab=c(([x,y])=>x+y===a||x+y===b),cm=lt?c(([x,y])=>(x+y)%2===0&&x+y<m):c(([x,y])=>(x+y)%2===1&&x+y>m);
+   return{stem:`<p>Two dice are thrown and their sum is noted. Find the probability that:</p>`,parts:[P(`the sum is ${k}`,F(ck,36),`${ck} of 36 outcomes`),P(`the sum is either ${Math.min(a,b)} or ${Math.max(a,b)}`,F(cab,36),`${cab} of 36 outcomes`),P(lt?`the sum is even and less than ${m}`:`the sum is odd and greater than ${m}`,F(cm,36),`${cm} of 36 outcomes`)]}})),
+ Q(1,()=>woTwo(false)),Q(1,()=>woTwo(true)),
+ Q(1,()=>{const b=balls4();return one(`A ${b.join(', ').replace(/, ([^,]*)$/,' and $1')} ball are placed in a bag. Two balls are drawn out at random, one after the other, <b>without replacement</b>. Using a tree diagram, find the probability that the ${b[1]} and ${b[3]} balls are drawn (in any order). ${mc(['½','⅓',Fr(1,12),'⅙'])}`,F(1,6),`${F(1,4)} × ${F(1,3)} + ${F(1,4)} × ${F(1,3)}`)}),
+ Q(1,()=>{const n=pick([3,4]);return one(`A family has ${n} children. Using a tree diagram, find the probability of the family having at least 1 girl.`,F(2**n-1,2**n),`1 − P(all boys) = 1 − ${F(1,2**n)}`)}),
+ Q(1,()=>{const hs=shuffle(['Comet','Blaze','Rocket','Misty','Storm']).slice(0,pick([4,5]));return one(`There are ${hs.length} horses in a race: ${hs.join(', ')}. Assuming each is equally likely to finish in any place, use a list to find the probability that ${hs[1]} comes second.`,F(1,hs.length),`each horse is equally likely to be second`)}),
+ Q(1,()=>{const [m1,m2,m3]=pick([['red','blue','green'],['bronze','silver','gold']]);return{stem:`<p>In a video game, each finished level earns a randomly chosen ${m1}, ${m2} or ${m3} gem. Lucas finishes two levels.</p>`,
+   parts:[P(`What is the probability of a ${m1} or ${m2} gem on the first level?`,F(2,3)),P(`What is the probability of a ${m3} gem on both levels?`,F(1,9),`${F(1,3)} × ${F(1,3)}`),P('What is the probability of two different coloured gems?',F(6,9),`1 − P(same) = 1 − ${F(3,9)}`)]}}),
+ Q(1,menu),
+ Q(2,()=>{const [a,b]=pick([['oranges','grapefruit'],['apples','pear'],['bananas','mango']]);const one_=b;return{stem:`<p>A box has two ${a} and one ${b}. Ivy takes a piece of fruit at random and eats it, so it is <b>not replaced</b>. Max then takes a piece of fruit at random from the box.</p>`,
+   parts:[P('What is the probability that Ivy and Max take the same type of fruit?',F(1,3),`${Fr(2,3)} × ${Fr(1,2)}`),P(`What is the probability that Ivy takes the ${b}?`,F(1,3)),P(`What is the probability that one of the ${a} is left in the box?`,F(2,3),`the fruit left is equally likely to be any of the 3`)]}}),
+ Q(2,()=>{const p=R(1,4)/10;return{stem:`<p>Sienna has a probability of ${p} of winning a game of chance. There are no draws.</p>`,
+   parts:[P("What is Sienna's chance of losing a game?",`${+(1-p).toFixed(1)}`,`1 − ${p}`),P("What is her chance of losing two games out of two?",`${+((1-p)**2).toFixed(2)}`,`${+(1-p).toFixed(1)} × ${+(1-p).toFixed(1)}`),P('What is her chance of winning exactly one game out of two?',`${+(2*p*(1-p)).toFixed(2)}`,`2 × ${p} × ${+(1-p).toFixed(1)}`)]}}),
+ Q(2,()=>twoGames(bagGame.pop())),Q(2,()=>twoGames(bagGame.pop())),
+ Q(2,()=>biased('heads')),Q(2,()=>biased('tails')),Q(2,()=>biased('tails')),
+ Q(2,()=>{const s=R(2,5);const ds=range(s,s+3);const lim=pick([ds[1],ds[2]])*100+100;const cnt=ds.filter(d=>d*100<lim).length;return one(`Four cards are marked ${ds.join(', ')}. They are shuffled and three are placed face down in a row, then turned over to make a 3-digit number. Find the probability that the number is less than ${lim}. ${mc(['1','0','½','¼','¾'])}`,F(cnt,4),`only the first card matters: ${cnt} of 4 cards`)}),
+ Q(2,()=>{const k=pick([6,4,3]);return one(`A coin is tossed and a fair die is thrown. Using a tree diagram, find the probability of getting a tail and a number less than or equal to ${k}. ${mc(['⅓','0','⅙','½','¼'])}`,F(k,12),`${F(1,2)} × ${F(k,6)}`)}),
+ Q(2,()=>{const [x,y,z]=pick([['red','green','black'],['pink','yellow','white']]);return one(`Olive has a bag of jellybeans: 2 ${x}, 2 ${y} and 1 ${z}. She eats 2 jellybeans at random, one after the other, <b>without replacement</b>. Using a list or tree diagram, find the probability that she eats one ${y} and one ${z}, in any order.`,F(1,5),`${Fr(2,5)} × ${Fr(1,4)} + ${Fr(1,5)} × ${Fr(2,4)} = ${Fr(2,20)} + ${Fr(2,20)}`)}),
+ Q(2,()=>one('Each night a game show contestant randomly picks box A or box B. Mia watches 3 nights in a row. Using a tree diagram, find the probability that the same box is picked on all 3 nights.',F(2,8),'AAA or BBB: 2 of 8 outcomes')),
+ Q(2,()=>cardsTwo([1,2,3])),
+ Q(2,()=>{const [a,b,c]=pick([['mango','lime','cola'],['strawberry','lemon','grape']]);return{stem:`<p>A freezer has 2 ${a}, 2 ${b} and 2 ${c} icy poles. Jess takes two at random, one after the other, <b>without replacement</b>.</p>`,
+   parts:[P('What is the probability she gets two of the same flavour?',F(1,5),`3 × (${Fr(2,6)} × ${Fr(1,5)})`),P(`What is the probability she gets two ${b} icy poles?`,F(1,15),`${Fr(2,6)} × ${Fr(1,5)}`),P('If this is repeated 20 times, how many times would you expect two different flavours?','16',`${F(4,5)} × 20`)]}}),
+ Q(2,()=>cardsTwo(pick([[4,5,6],[5,6,7],[2,3,4]]))),
+ Q(2,()=>{const [a,b,c]=pick([['red','yellow','white'],['green','blue','orange']]);return{stem:`<p>A bag has one ${a}, one ${b} and one ${c} ball. A ball is taken out and then replaced before a second ball is taken.</p>`,
+   parts:[P(`What is the probability the ${a} ball is chosen twice?`,F(1,9),`${F(1,3)} × ${F(1,3)}`),P(`What is the probability the ${b} ball is chosen at least once?`,F(5,9),`1 − ${F(2,3)} × ${F(2,3)}`),P(`What is the probability the ${c} ball is chosen second?`,F(1,3))]}}),
+ Q(3,()=>numberedBalls(3,3,5,6,'red')),Q(3,()=>numberedBalls(3,4,5,3,'blue')),
+ Q(3,twoSolve),Q(3,twoSolve),
+ Q(3,threeMatch),Q(3,threeMatch),Q(3,threeMatch),Q(3,threeMatch)
+];
+
+/* ---------- 9.4 Venn diagrams and two-way tables (mirrors "Venn Diagrams" Q1–Q39) ---------- */
+let bagCtx=[],bagVenn=[],bagClass=[],usedDigits=new Set();
+const tctx=[['Athletics','Swimming','students at the athletics and swimming carnivals'],['Art','History','students who study Art and History'],['Cricket','Football','favourite sports to play'],['Saxophone','Guitar','instruments played'],['Hat','Sunglasses','people wearing hats and sunglasses at the beach'],['Walking','Jogging','people exercising at a park'],['Chess','Coding','students in lunchtime clubs'],['Dog','Cat','pets owned by Year 9']];
+function tw4(qset){const [A,B,title]=bagCtx.pop();const {c11,c12,c21,c22}=mkTable();const r1=c11+c12,r2=c21+c22,k1=c11+c21,k2=c12+c22;const nA='Not '+A.toLowerCase(),nB='Not '+B.toLowerCase();
+  const qs={Brow:P(`What percentage are in the ${B} group?`,`${k1}%`,`column total ${dec2(k1)}`),Arow:P(`What percentage are in the ${A} group?`,`${r1}%`,`row total ${dec2(r1)}`),AnB:P(`What percentage are in ${A} but not ${B}?`,`${c12}%`,`${dec2(c12)}`),BnA:P(`What percentage are in ${B} but not ${A}?`,`${c21}%`,`${dec2(c21)}`),
+   both:P('Find the probability (as a %) a person chosen at random is in both.',`${c11}%`,`${dec2(c11)}`),neither:P('Find the probability (as a %) a person chosen at random is in neither.',`${c22}%`,`${dec2(c22)}`),either:P(`What percentage are in either ${A} or ${B} (or both)?`,`${100-c22}%`,`1 − ${dec2(c22)}`),notB:P(`Find the probability (as a %) a person chosen at random is not in ${B}.`,`${k2}%`,`column total ${dec2(k2)}`)};
+  return{stem:`<p>The two-way table shows the proportion of ${title}.</p>${table(['',B,nB,'Total'],[[A,dec2(c11),dec2(c12),dec2(r1)],[nA,dec2(c21),dec2(c22),dec2(r2)],['Total',dec2(k1),dec2(k2),'1']])}`,parts:qset.map(k=>qs[k])}}
+function digits2(parity,atLeast,cmp){let ds;do{ds=shuffle(range(1,8)).slice(0,4).sort((a,b)=>a-b)}while(usedDigits.has(ds.join()));usedDigits.add(ds.join());const nums=[];for(const a of ds)for(const b of ds)nums.push([a,b]);
+  const d=pick(ds);const k=cmp==='<'?ds[0]+ds[1]+R(1,3):ds[2]+ds[3]-R(1,3);const cp=nums.filter(([a,b])=>parity==='even'?b%2===0:b%2===1).length;const cd=nums.filter(([a,b])=>atLeast?(a===d||b===d):((a===d)!==(b===d))).length;const cs=nums.filter(([a,b])=>cmp==='<'?a+b<k:a+b>k).length;
+  const cols=ds.map(a=>ds.map(b=>''+a+b));
+  return{stem:`<p>A two-digit number is formed using the digits ${ds.join(', ')} (digits can repeat). The list shows all the possible results.</p><div class="numgrid">${ds.map((_,i)=>cols.map(c=>`<span>${c[i]}</span>`).join('')).join('')}</div><p>Find the probability that:</p>`,
+  parts:[P(`the number is ${parity}`,F(cp,16),`${cp} of 16`),P(`the number contains ${atLeast?'at least':'exactly'} one ${d}`,F(cd,16),`${cd} of 16`),P(`the sum of the two digits is ${cmp==='<'?'less than':'greater than'} ${k}`,F(cs,16),`${cs} of 16`)]}}
+function twMissing(ask){const [A,B,title]=bagCtx.pop();const {c11,c12,c21,c22}=mkTable();const r1=c11+c12,r2=c21+c22,k1=c11+c21,k2=c12+c22;const nA='Not '+A.toLowerCase(),nB='Not '+B.toLowerCase();let N;do{N=pick([25,50,100,200,240,400,1200])}while((N*k1)%100||(N*r1)%100);
+  const lay=ask%2===0?[[A,dec2(c11),'?',dec2(r1)],[nA,'?',dec2(c22),'?'],['Total',dec2(k1),dec2(k2),'1']]:[[A,'?',dec2(c12),dec2(r1)],[nA,dec2(c21),'?','?'],['Total',dec2(k1),'?','1']];
+  const fill=ask%2===0?`${A} & ${nB.toLowerCase()} = ${dec2(c12)}; ${nA.toLowerCase()} & ${B} = ${dec2(c21)}; ${nA.toLowerCase()} total = ${dec2(r2)}`:`${A} & ${B} = ${dec2(c11)}; ${nA.toLowerCase()} & ${nB.toLowerCase()} = ${dec2(c22)}; ${nB.toLowerCase()} total = ${dec2(k2)}; ${nA.toLowerCase()} total = ${dec2(r2)}`;
+  return{stem:`<p>Some cells are missing from this table of ${title}.</p>${table(['',B,nB,'Total'],lay)}`,
+  parts:[P('Complete the table.',fill,'each row and column must add to its total'),P(`What percentage are in the ${ask<2?B:A} group?`,`${ask<2?k1:r1}%`),P(`Find the probability (as a %) a person chosen at random is in ${B} but not ${A}.`,`${c21}%`),P(`If there are ${N.toLocaleString()} people, how many are in ${ask<2?A:B}?`,`${N*(ask<2?r1:k1)/100}`,`${dec2(ask<2?r1:k1)} × ${N.toLocaleString()}`)]}}
+function vennQ(){const [A,B,who,v]=bagVenn.pop();const a=R(4,12),both=R(2,9),b=R(4,12),n=R(1,6),T=a+both+b+n;const f=pick([0,1]);
+  return{stem:`<p>Students in ${who} class chose their favourite. The Venn diagram shows the results.</p>${venn(A,B,a,both,b,n)}<p>Find the probability a student chosen at random ${v}:</p>`,
+  parts:[f?P(`${B}`,F(b+both,T),`(${b} + ${both}) ÷ ${T}`):P(`${A}`,F(a+both,T),`(${a} + ${both}) ÷ ${T}`),f?P(`${A} but not ${B}`,F(a,T),`${a} ÷ ${T}`):P(`${B} but not ${A}`,F(b,T),`${b} ÷ ${T}`),pick([P(`both ${A} and ${B}`,F(both,T),`${both} ÷ ${T}`),P(`neither`,F(n,T),`${n} ÷ ${T}`)])]}}
+function diceQ(prod,second){const D=dice();const op=prod?(x,y)=>x*y:(x,y)=>x+y;const L=prod?'P':'S';const c=f=>D.filter(([x,y])=>f(op(x,y))).length;const vals=prod?[4,6,8,12]:[4,5,6,8,9,10];const k=pick(vals);const r=pick(vals.filter(v=>v!==k));
+  const ck=c(v=>v===k),cr=c(v=>v===r);const sec=second==='even'?P(`Find the probability that ${L} is even.`,F(c(v=>v%2===0),36),`${c(v=>v%2===0)} of 36`):second==='odd'?P(`Find the probability that ${L} is odd.`,F(c(v=>v%2),36),`${c(v=>v%2)} of 36`):P(`Find the probability that ${L} is greater than ${second}.`,F(c(v=>v>second),36),`${c(v=>v>second)} of 36`);
+  return{stem:`<p>Two standard dice are tossed and their ${prod?'product':'sum'}, ${L}, is calculated.</p>`,
+  parts:[P(`Find the probability that ${L} is ${k}.`,F(ck,36),`${ck} of 36`),sec,P(`Find the probability that ${L} = ${r} on two separate tosses of the pair of dice.`,F(cr*cr,1296),`${F(cr,36)} × ${F(cr,36)}`)]}}
+function classQ(){const [A,B]=bagClass.pop();const k=R(3,9),ao=R(3,10),bo=R(3,10),n=R(1,6),N=k+ao+bo+n,a=k+ao,b=k+bo;const second=pick([0,1]);
+  return{stem:`<p>In a class of ${N} students, ${a} study ${A}, ${b} study ${B} and ${n} ${n===1?'studies':'study'} neither.</p>`,
+  parts:[P(`What is the probability a student chosen at random studies both ${A} and ${B}?`,F(k,N),`both = ${a} + ${b} + ${n} − ${N} = ${k}`),second?P(`What is the probability a student studies ${B} but not ${A}?`,F(bo,N),`${b} − ${k} = ${bo}`):P(`What is the probability a student studies ${A} but not ${B}?`,F(ao,N),`${a} − ${k} = ${ao}`),P(`What is the probability two students chosen at random both study ${second?A:B}?`,F(second?a*(a-1):b*(b-1),N*(N-1)),second?`${Fr(a,N)} × ${Fr(a-1,N-1)}`:`${Fr(b,N)} × ${Fr(b-1,N-1)}`)]}}
+const T4=[
+ Q(0,()=>{bagCtx=shuffle(tctx.concat(tctx));usedDigits=new Set();bagVenn=shuffle([['Netball','Soccer','Ms Nguyen\'s','plays'],['Tennis','AFL','Mr Kowalski\'s','plays'],['Clarinet','Flute','Ms Adeyemi\'s','plays'],['Green','Purple','Mr Silva\'s','likes'],['Pizza','Sushi','Mrs Walsh\'s','likes'],['Basketball','Swimming','Ms Rahman\'s','likes']]);bagClass=shuffle([['Music','Visual Arts'],['History','Geography'],['French','Japanese'],['Biology','Chemistry'],['Mathematics','Physics'],['Drama','Dance']]);
+   return tw4(['Brow','AnB','both'])}),
+ Q(0,()=>tw4(['BnA','Arow','notB'])),Q(0,()=>tw4(['Arow','AnB','neither'])),Q(0,()=>tw4(['AnB','either','both'])),
+ Q(1,()=>digits2('even',true,'<')),Q(1,()=>digits2('odd',false,'>')),Q(1,()=>digits2('even',true,'<')),Q(1,()=>digits2('odd',false,'>')),Q(1,()=>digits2('odd',true,'<')),Q(1,()=>digits2('even',false,'<')),Q(1,()=>digits2('odd',true,'>')),
+ Q(1,()=>twMissing(0)),Q(1,()=>twMissing(1)),Q(1,()=>twMissing(2)),Q(1,()=>twMissing(3)),
+ Q(0,vennQ),Q(0,vennQ),Q(0,vennQ),Q(0,vennQ),Q(0,vennQ),Q(0,vennQ),
+ Q(2,()=>{let x,y,z,w;do{x=R(10,25);y=R(8,20);z=R(25,45);w=100-x-y-z}while(w<5);const N=100*R(2,6);return{stem:`<p>In a group of ${N} students: ${x}% study Art and Music, ${y}% study Art but not Music and ${z}% study neither. Draw a two-way table to show this.</p>`,
+   parts:[P('What percentage study Music but not Art?',`${w}%`,`100 − ${x} − ${y} − ${z}`),P('What percentage study Art?',`${x+y}%`,`${x} + ${y}`),P('How many do not study Music?',`${N*(y+z)/100}`,`(${y} + ${z})% of ${N}`)]}}),
+ Q(2,()=>{let x,y,z,w;do{x=R(15,30);y=R(8,20);z=R(20,40);w=100-x-y-z}while(w<5);const N=pick([100,200,300,400]);return{stem:`<p>In a group of ${N} students: ${x}% play tennis but not golf, ${y}% play tennis and golf and ${z}% play neither. Draw a two-way table to show this.</p>`,
+   parts:[P('What percentage play golf but not tennis?',`${w}%`,`100 − ${x} − ${y} − ${z}`),P('What percentage play tennis?',`${x+y}%`,`${x} + ${y}`),P('How many play golf but not tennis?',`${N*w/100}`,`${w}% of ${N}`)]}}),
+ Q(2,()=>{const N=pick([40,60,80,120]);let m,b,n,mb;do{m=R(8,12)*5;b=R(4,9)*5;n=R(3,8)*5;mb=m+b+n-100}while(mb<5||mb>=Math.min(m,b)||(N*(m-mb))%100||(N*(b-mb))%100);
+   return{stem:`<p>On a train with ${N} passengers: ${m}% are adults, ${b}% are wearing a hat, and ${n}% are not adults and are not wearing a hat. Draw a two-way table to show this.</p>`,
+   parts:[P('What percentage are adults who are not wearing a hat?',`${m-mb}%`,`adults with hat = ${m} + ${b} + ${n} − 100 = ${mb}%, so ${m} − ${mb}`),P('Find the probability (as a %) that a passenger is a child wearing a hat.',`${b-mb}%`,`${b} − ${mb}`),P('How many passengers are not wearing a hat?',`${N*(100-b)/100}`,`${100-b}% of ${N}`)]}}),
+ Q(2,()=>{let x,y,z,w;do{x=R(15,35);y=R(10,25);z=R(4,12);w=100-x-y-z}while(w<5);const N=pick([200,300,400,500]);return{stem:`<p>At a sports day with ${N} students: ${x}% are doing relays and high jump, ${y}% are doing relays but not high jump and ${z}% are doing neither. Draw a two-way table to show this.</p>`,
+   parts:[P('What percentage are doing high jump?',`${x+w}%`,`high jump only = 100 − ${x} − ${y} − ${z} = ${w}%, so ${x} + ${w}`),P('How many are doing neither?',`${N*z/100}`,`${z}% of ${N}`),P('How many are doing high jump but not relays?',`${N*w/100}`,`${w}% of ${N}`)]}}),
+ Q(2,()=>diceQ(true,'even')),Q(2,()=>diceQ(false,'even')),Q(2,()=>diceQ(true,'odd')),Q(2,()=>diceQ(false,5)),
+ Q(3,()=>{const N=pick([500,600,800]);let e,p,n,b;do{e=R(15,30);p=R(10,25);n=R(50,70);b=e+p+n-100}while(b<2||b>=Math.min(e,p));const M=R(10,30)*1000;
+   return{stem:`<p>Of ${N} people tested, ${e}% test positive to virus E, ${p}% test positive to virus P and ${n}% test negative to both.</p>`,
+   parts:[P('Find the probability (as a %) that a person chosen at random has E but not P.',`${e-b}%`,`both = ${e} + ${p} + ${n} − 100 = ${b}%, so ${e} − ${b}`),P('Find the number of people with both.',`${N*b/100}`,`${b}% of ${N}`),P(`If this is a representative sample, how many people in a town of ${M.toLocaleString()} would have at least one virus?`,`${(M*(100-n)/100).toLocaleString()}`,`${100-n}% of ${M.toLocaleString()}`)]}}),
+ Q(3,()=>{const N=pick([40,60,80]);let d,both,n;do{d=R(8,12)*5;both=R(2,4)*5;n=R(2,5)*5}while(d+n>95);const cat=100-d-n+both;const S=pick([600,800,1200]);
+   return{stem:`<p>In a class of ${N} students, ${d}% have a pet dog, ${both}% have a dog and a cat, and ${n}% have neither.</p>`,
+   parts:[P('Find the probability (as a %) a student chosen at random has a dog but not a cat.',`${d-both}%`,`${d} − ${both}`),P('Find the number of students with a pet cat.',`${N*cat/100}`,`cat only = 100 − ${d} − ${n} = ${100-d-n}%, cat total = ${100-d-n} + ${both} = ${cat}%`),P(`If this is a representative sample, how many students in a school of ${S} have at least one of these pets?`,`${S*(100-n)/100}`,`${100-n}% of ${S}`)]}}),
+ Q(3,()=>{const N=pick([100,200,300]);let mf,fs,s;do{mf=R(15,30);fs=R(25,45);s=R(50,70)}while(fs>=s||mf>100-s);const ff=100-s-mf;const M=pick([12000,15000,18000,20000]);
+   return{stem:`<p>At a concert, a group of ${N} people were surveyed: ${mf}% were males with standing tickets, ${fs}% were females with seated tickets and ${s}% had seated tickets.</p>`,
+   parts:[P('Find the probability (as a %) that a person chosen at random has a standing ticket.',`${100-s}%`,`100 − ${s}`),P('Find the number of females in the group.',`${N*(fs+ff)/100}`,`female standing = ${100-s} − ${mf} = ${ff}%; females = ${fs} + ${ff} = ${fs+ff}%`),P(`If this is a representative sample of the ${M.toLocaleString()} people at the concert, how many are seated?`,`${(M*s/100).toLocaleString()}`,`${s}% of ${M.toLocaleString()}`)]}}),
+ Q(3,()=>{const N=pick([400,500,800]);let a,bo,both,n;do{a=R(20,35);bo=R(10,20);both=R(4,10);n=100-a-bo}while(both>=a||n<20);const M=R(10,25)*1000;
+   return{stem:`<p>Of ${N} people tested, ${a}% test positive to flu A, ${bo}% test positive to flu B but not flu A, and ${both}% test positive to both.</p>`,
+   parts:[P('Find the probability (as a %) that a person has flu A but not flu B.',`${a-both}%`,`${a} − ${both}`),P('Find the number of people with neither.',`${N*n/100}`,`neither = 100 − ${a} − ${bo} = ${n}%`),P(`If this is a representative sample, how many people in a town of ${M.toLocaleString()} have at least one flu?`,`${(M*(100-n)/100).toLocaleString()}`,`${100-n}% of ${M.toLocaleString()}`)]}}),
+ Q(3,classQ),Q(3,classQ),Q(3,classQ),Q(3,classQ),Q(3,classQ),Q(3,classQ)
+];
+
+
+/* ---------- 20-question selections for Year 9 Advanced ---------- */
+const T1x={
+ comp:Q(1,()=>{const p=R(5,45)/100;const pc=R(2,7),pd=8;return{stem:`<p>Complementary events: an event either happens or it does not.</p>`,
+   parts:[P(`Mia's chance of winning a game is ${p.toFixed(2)}. There are no draws. What is her chance of losing?`,(1-p).toFixed(2),`1 − ${p.toFixed(2)}`),P(`The chance of rain tomorrow is ${Math.round(p*100)}%. What is the chance it does <i>not</i> rain?`,`${100-Math.round(p*100)}%`,`100% − ${Math.round(p*100)}%`),P(`P(E) = ${F(pc,pd)}. Find P(not E).`,F(pd-pc,pd),`1 − ${F(pc,pd)}`)]}}),
+ mult:Q(3,()=>{const N=pick([50,60,80,100,120]);const [a,b]=pick([[3,5],[4,6],[2,7],[3,4],[5,6],[4,10]]);const s=range(1,N);const l=a*b/gcd(a,b);
+   const ma=s.filter(x=>x%a===0).length,mab=s.filter(x=>x%l===0).length,mor=s.filter(x=>x%a===0||x%b===0).length,mb=s.filter(x=>x%b===0).length;
+   return{stem:`<p>A whole number from 1 to ${N} is chosen at random.</p><p>Find the probability that the number is:</p>`,
+   parts:[P(`a multiple of ${a}`,F(ma,N),`${ma} multiples of ${a}`),P(`a multiple of both ${a} and ${b}`,F(mab,N),`multiples of ${l} (the LCM): ${mab}`),P(`a multiple of ${a} or ${b} (or both)`,F(mor,N),`${ma} + ${mb} − ${mab} = ${mor}`)]}})
+ ,revBag:Q(2,()=>{const r=R(3,8),b=R(4,12),T=r+b;return{stem:`<p>A bag contains ${r} red marbles and some blue marbles. The probability of choosing a red marble at random is ${F(r,T)}.</p>`,
+   parts:[P('How many blue marbles are in the bag?',`${b}`,`${F(r,T)} of the marbles are red, so there are ${T} marbles in total; ${T} − ${r} = ${b}`),P('What is the probability of choosing a blue marble?',F(b,T),`1 − ${F(r,T)}`)]}})
+ ,addRed:Q(3,()=>{const r=R(2,5),b=R(6,12);return{stem:`<p>A bag has ${r} red and ${b} blue counters.</p>`,
+   parts:[P('What is the probability of choosing a red counter?',F(r,r+b),`${r} out of ${r+b}`),P(`How many red counters must be added so that P(red) = ${F(1,2)}?`,`${b-r}`,`need equal numbers of red and blue: ${b} − ${r}`),P(`How many red counters must be added (to the original bag) so that P(red) = ${F(2,3)}?`,`${2*b-r}`,`red must be twice blue: 2 × ${b} − ${r}`)]}})
+ ,cardsOr:Q(3,()=>{const col=pick(['red','black']);const face=pick(['King','Queen','Jack','Ace']);const suit=pick(['Heart','Spade','Diamond','Club']);
+   return{stem:`<p>A card is drawn at random from a standard pack of 52 cards. Picture cards are Jacks, Queens and Kings. Be careful not to count any card twice.</p><p>Find the probability that the card is:</p>`,
+   parts:[P(`${col} or a ${face}`,F(28,52),`26 ${col} + 4 ${face}s − 2 ${col} ${face}s = 28`),P(`a ${suit} or a picture card`,F(22,52),`13 ${suit}s + 12 picture cards − 3 ${suit} picture cards = 22`),P(`neither ${col} nor a ${face}`,F(24,52),`52 − 28 = 24`)]}})
+ ,design:Q(2,()=>{const n=pick([12,24]);const [f1,f2]=pick([[[1,4],[1,3]],[[1,6],[1,2]],[[1,3],[1,6]],[[1,4],[1,6]]]);const r=n*f1[0]/f1[1],bl=n*f2[0]/f2[1],g=n-r-bl;
+   return{stem:`<p>Jai is designing a spinner with ${n} equal sectors coloured red, blue and green. He wants P(red) = ${F(f1[0],f1[1])} and P(blue) = ${F(f2[0],f2[1])}. The rest are green.</p>`,
+   parts:[P('How many sectors should be red?',`${r}`,`${F(f1[0],f1[1])} × ${n}`),P('How many sectors should be green?',`${g}`,`${n} − ${r} − ${bl}`),P('What is the probability of <i>not</i> landing on green?',F(r+bl,n),`(${r} + ${bl}) ÷ ${n}`)]}})
+ ,compare:Q(1,()=>{let a1,n1,a2,n2;do{n1=R(6,12);a1=R(2,n1-2);n2=R(6,12);a2=R(2,n2-2)}while(a1*n2===a2*n1);const better=a1*n2>a2*n1?'Bag A':'Bag B';
+   return{stem:`<p>Bag A has ${a1} red balls out of ${n1}. Bag B has ${a2} red balls out of ${n2}. You win if you pick a red ball.</p>`,
+   parts:[P('Find P(red) from Bag A.',F(a1,n1)),P('Find P(red) from Bag B.',F(a2,n2)),P('Which bag gives you the better chance of winning? Show why.',better,`compare with a common denominator: ${Fr(a1*n2,n1*n2)} and ${Fr(a2*n1,n1*n2)}`)]}})
+};
+const T2x={
+ sim:Q(2,()=>{const k=R(3,8);const dg=Array.from({length:20},()=>R(0,9));const cnt=dg.filter(x=>x<k).length;return{stem:`<p>The chance of rain on any day in March is ${k*10}%. To simulate 20 days, a random number generator gives one digit (0–9) per day. The digits 0 to ${k-1} mean <b>rain</b>.</p><div class="digits">${dg.join(' ')}</div>`,
+   parts:[P(`Why do the digits 0 to ${k-1} represent rain?`,`They are ${k} of the 10 equally likely digits, so P(rain) = ${F(k,10)} = ${k*10}%.`),P('What is the experimental probability of rain from this simulation?',F(cnt,20),`${cnt} rainy days out of 20`),P('How could you get a more reliable estimate?','Run many more trials. More trials give a relative frequency closer to the theoretical probability.')]}}),
+ die:Q(3,()=>{const fair=rnd()<.5;const six=fair?R(92,110):R(140,170);return{stem:`<p>Kai rolls a die 600 times. A six comes up ${six} times.</p>`,
+   parts:[P('What is the relative frequency of a six?',F(six,600),`${six} ÷ 600`),P('How many sixes would you expect from a fair die?','100',`${F(1,6)} × 600`),P('Do you think the die is fair? Give a reason.',fair?`Probably fair. ${six} is close to 100 over a large number of rolls.`:`Probably biased. ${six} is much more than 100, and 600 rolls is a large sample.`)]}})
+};
+const T4x={
+ notation:Q(1,()=>{const a=R(4,12),both=R(2,8),b=R(4,12),n=R(2,7),T=a+both+b+n;return{stem:`<p>The Venn diagram shows the number of students in sets A (play a sport) and B (learn an instrument).</p>${venn('A','B',a,both,b,n)}`,
+   parts:[P('Find n(A ∩ B).',`${both}`,'the overlap'),P('Find n(A ∪ B).',`${a+both+b}`,`${a} + ${both} + ${b}`),P("Find P(A′), the probability a student chosen at random is not in A.",F(b+n,T),`(${b} + ${n}) ÷ ${T}`),P("Find P(B ∩ A′).",F(b,T),`in B but not A: ${b} ÷ ${T}`)]}}),
+ toVenn:Q(1,()=>{const [A,B]=pick([['Tea','Coffee'],['Bus','Train'],['Maths club','Debating']]);const both=R(3,12),ao=R(3,12),bo=R(3,12),n=R(2,10),T=both+ao+bo+n;
+   return{stem:`<p>The two-way table shows what ${T} staff said about ${A} and ${B}.</p>${table(['',B,'Not '+B.toLowerCase(),'Total'],[[A,both,ao,both+ao],['Not '+A.toLowerCase(),bo,n,bo+n],['Total',both+bo,ao+n,T]])}`,
+   parts:[P('Draw a Venn diagram showing this information.',`${A} only ${ao}, both ${both}, ${B} only ${bo}, neither ${n}`),P(`Find the probability a person chosen at random is in ${A} or ${B} (or both).`,F(T-n,T),`(${ao} + ${both} + ${bo}) ÷ ${T}`),P('Find the probability a person is in exactly one of the two groups.',F(ao+bo,T),`(${ao} + ${bo}) ÷ ${T}`)]}})
+};
+const sel=(arr,list)=>list.map(x=>typeof x==='number'?arr[x]:x);
+const S1=sel(T1,[10,13,16,9,T1x.comp,T1x.compare,22,23,26,28,30,T1x.design,T1x.revBag,31,34,36,38,T1x.cardsOr,T1x.addRed,T1x.mult]);
+const S2=sel(T2,[0,3,4,5,6,8,9,12,15,18,19,21,26,27,33,37,T2x.die,38,39]);
+const S3=sel(T3,[1,2,3,6,8,10,12,13,15,17,18,19,21,26,28,29,32,34,36,37]);
+const S4=sel(T4,[15,16,0,1,T4x.notation,T4x.toVenn,4,5,11,12,25,26,21,22,24,29,30,31,33,34]);
+const TOPICS=[
+ {id:'9-1',code:'9.1',name:'Theoretical Probability',desc:'Coins, dice, spinners, cards and bags of objects.',gen:S1,init:T1[0]},
+ {id:'9-2',code:'9.2',name:'Observed Probability and Simulations',desc:'Relative frequency, surveys, samples and expected numbers.',gen:S2,init:T2[0]},
+ {id:'9-3',code:'9.3',name:'Tree Diagrams and Two-Step Experiments',desc:'Two- and three-step events, with and without replacement.',gen:S3,init:T3[0]},
+ {id:'9-4',code:'9.4',name:'Venn Diagrams and 2-Way Tables',desc:'Venn diagrams, two-way tables, lists and dice grids.',gen:S4,init:T4[0]}
+];
+const LEVELS=['Easy','Medium','Harder','Challenge'];
+
+/* ---------- UI ---------- */
+const $=s=>document.querySelector(s);
+let current=null;
+$('#topics').innerHTML=TOPICS.map((t,i)=>`<button class="topic" type="button" data-i="${i}"><span class="num">${t.code}</span><span><h3>${t.name}</h3><p>${t.desc} <b>${t.gen.length} questions.</b></p></span></button>`).join('');
+$('#topics').addEventListener('click',e=>{const b=e.target.closest('.topic');if(b)openTopic(+b.dataset.i)});
+
+function openTopic(i){
+  current=TOPICS[i];
+  try{history.replaceState(null,'','#t'+current.id)}catch(e){}
+  $('#chooser').hidden=true;$('#sheet').hidden=false;
+  $('#sheetTitle').innerHTML=`<span>${current.code}</span> ${current.name}`;
+  const n=current.gen.length;
+  $('#noteText').innerHTML=`Write the heading <b>${current.code} ${current.name} – Revision</b>. Number each answer Q1–Q${n} and show all your working.`;
+  build(true);window.scrollTo({top:0});
+}
+function build(setA){
+  rnd=setA?seeded(9100+TOPICS.indexOf(current)):Math.random;
+  current.init();const qs=current.gen.map(g=>({...g(),li:g.lvl}));
+  $('#questions').innerHTML=qs.map((q,i)=>`
+    <article class="q">
+      <div class="qhead"><span class="qnum">Q${i+1}</span>
+        <span class="level"><span class="dots">${[0,1,2,3].map(k=>`<i class="${k<=q.li?'on':''}"></i>`).join('')}</span>${LEVELS[q.li]}</span></div>
+      ${q.stem?`<div class="stem">${q.stem}</div>`:''}
+      <ol class="parts">${q.parts.map((p,j)=>`<li${q.parts.length===1?' class="solo"':''}><span class="pl">${q.parts.length===1?'':`(${'abcde'[j]})`}</span><span>${p.q}</span></li>`).join('')}</ol>
+    </article>`).join('');
+}
+$('#back2').addEventListener('click',()=>$('#back').click());
+$('#back').addEventListener('click',()=>{$('#sheet').hidden=true;$('#chooser').hidden=false;try{history.replaceState(null,'',location.pathname)}catch(e){}});
+const h=(location.hash||'').replace('#t','');const hi=TOPICS.findIndex(t=>t.id===h);if(hi>=0)openTopic(hi);
+</script>
+</body>
+</html>
